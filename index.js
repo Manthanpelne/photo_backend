@@ -7,16 +7,52 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy
 require("dotenv").config();
 const session = require('express-session');
 const { authentication } = require("./middleware/Authentication")
+const cors = require("cors");
 
-const Redis = require("ioredis")
-const redis = new Redis({
-    port:process.env.port,
-    host:process.env.redisURL,
-    username:process.env.username,
+
+
+app.use(
+  cors({
+    origin: "*",
+    preflightContinue: true
+  })
+);
+
+
+app.use(async(req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "DELETE, POST, GET, PATCH, OPTIONS"
+  ),
+  res.header(
+    "Access-Control-Allow-Credentials",
+    "true"
+  ),
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+  next();
+});
+
+// const redis = new Redis({
+  //     port:process.env.port,
+  //     host:process.env.redisURL,
+  //     username:process.env.username,
+  //     password:process.env.password,
+  // })
+
+  const {createClient} = require("redis")
+
+  const client = createClient({
     password:process.env.password,
-})
-
-redis.connect(()=>console.log("Redis connected"));
+    socket: {
+        host: process.env.redisURL,
+        port: process.env.redis_port
+    }
+  });
+client.connect(()=>console.log("Redis connected"))
 
 
 
@@ -26,8 +62,6 @@ const { photographyRouter } = require("./routes/photographer.route");
 const { UserRoute } = require("./routes/user.route");
 const { BlacklistModel } = require("./models/blacklist.model")
 const { appointmentRouter } = require("./routes/appointment.route")
-const cors = require("cors");
-app.use(cors());
 
 app.use(session({
   secret: "my-secret-key",
