@@ -1,10 +1,20 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { createClient } = require("redis");
-const client = createClient();
-client.on("error", (err) => console.log("Redis Client Error", err));
-client.connect();
+
+
+
+const Redis = require("ioredis")
+const redis = new Redis({
+    port:process.env.port,
+    host:process.env.redisURL,
+    username:process.env.username,
+    password:process.env.password,
+})
+
+redis.connect(()=>console.log("Redis connected"));
+
+
 const { UserModel } = require("../models/user.model");
 UserRoute = express.Router();
 const authentication = require("../middleware/Authentication")
