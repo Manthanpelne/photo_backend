@@ -13,17 +13,17 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://zingy-cajeta-563e6d.netlify.app",
     preflightContinue: true
   })
 );
 
 
 app.use(async(req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "https://zingy-cajeta-563e6d.netlify.app");
   res.header(
     "Access-Control-Allow-Methods",
-    "DELETE, POST, GET, PATCH, OPTIONS"
+    "DELETE, POST, GET, PATCH, PUT, OPTIONS"
   ),
   res.header(
     "Access-Control-Allow-Credentials",
@@ -31,7 +31,7 @@ app.use(async(req, res, next) => {
   ),
     res.header(
       "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
   next();
 });
