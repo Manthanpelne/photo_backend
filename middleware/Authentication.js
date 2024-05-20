@@ -6,15 +6,18 @@ require("dotenv").config()
 // const cors = require("cors");
 // app.use(cors());
 
-const Redis = require("ioredis")
-const redis = new Redis({
-    port:process.env.port,
-    host:process.env.redisURL,
-    username:process.env.username,
-    password:process.env.password,
-})
+const {createClient} = require("redis")
 
-redis.connect(()=>console.log("Redis connected"));
+const client = createClient({
+    password:process.env.password,
+    socket: {
+        host: process.env.redisURL,
+        port: process.env.redis_port
+    }
+  });
+client.connect(()=>console.log("Redis connected"))
+
+
 
 const authentication = async (req, res, next) => {
     
