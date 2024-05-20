@@ -3,16 +3,16 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 
+const {createClient} = require("redis")
 
-const Redis = require("ioredis")
-const redis = new Redis({
-    port:process.env.port,
-    host:process.env.redisURL,
-    username:process.env.username,
-    password:process.env.password,
-})
-
-redis.connect(()=>console.log("Redis connected"));
+const client = createClient({
+  password:process.env.password,
+  socket: {
+      host: process.env.redisURL,
+      port: process.env.redis_port
+  }
+});
+client.connect(()=>console.log("Redis connected"))
 
 
 const { UserModel } = require("../models/user.model");
